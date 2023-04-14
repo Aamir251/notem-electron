@@ -1,0 +1,36 @@
+.heading-one {
+    font-size: 40px;
+    line-height: 52px;
+}
+
+.heading-two {
+    font-size: 32px;
+    line-height: 42px;
+}
+
+.heading-three {
+    font-size: 20px;
+    line-height: 32px;
+}
+
+.heading-four {
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.heading-five {
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.bold {
+    font-weight: 700;
+}
+
+.semibold {
+    font-weight: 500;
+}
+
+.normal {
+    font-weight: 300;
+}

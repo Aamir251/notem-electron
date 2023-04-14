@@ -1,0 +1,41 @@
+/* .DraftEditor-editorContainer,
+.DraftEditor-root,
+.public-DraftEditor-content {
+    background-color: aliceblue;
+    
+} */
+
+.rdw-editor-main {
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #DEE3FF
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #3a317128;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #3A3171;
+}
+
+.ql-container {
+    height: 80% !important;
+    border: none !important;
+}
+
+.codex-editor__redactor {
+    padding-bottom: 0 !important;
+}
+
+.ce-block__content {
+    /* max-width: none; */
+}
