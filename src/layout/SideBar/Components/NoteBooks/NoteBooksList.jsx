@@ -5,18 +5,18 @@ import AddSectionForm from "../AddSectionForm"
 import { AnimatePresence, motion } from "framer-motion"
 import { AddIcon } from "../../icons/AddIcon"
 import SectionsList from "../Sections/SectionsList"
-const NoteBooksList = ({ email, list, setList, fetchNoteBooksList }) => {
+import { useNotebooksList } from "../../../../Context/NotebooksContext"
+import { useCache } from "../../../../Context/CacheContext"
+const NoteBooksList = ({ email }) => {
     
     const [ currentlySelected, setCurrentlySelected ] = useState(null)
-   
-    useEffect(() => {      
-        fetchNoteBooksList()
-    },[])
-
+    const { notebooksList } = useNotebooksList()
+    console.log("All Notebooks ", notebooksList);
+    
     return (
         <ul className="w-52 mx-auto space-y-3  mt-4">
             {
-                list.length > 0 && list.map((item, index) => <NotebookName
+                notebooksList.length > 0 && notebooksList.map((item, index) => <NotebookName
                 onClick={() => setCurrentlySelected(index)}
                 currentlySelected={currentlySelected}
                 email={email}
@@ -24,8 +24,6 @@ const NoteBooksList = ({ email, list, setList, fetchNoteBooksList }) => {
                 index={index % 3}
                 name={item} 
                 key={item} 
-                setList={setList}
-                fetchNoteBooksList={fetchNoteBooksList}
             /> )
             }
         </ul>
@@ -34,8 +32,8 @@ const NoteBooksList = ({ email, list, setList, fetchNoteBooksList }) => {
 
 export default NoteBooksList;
 
-const NotebookName = ({ fetchNoteBooksList, onClick, isActive, email, name, index, setList }) => {
-
+const NotebookName = ({ onClick, isActive, email, name, index }) => {
+    const { setNotebooksCache } = useCache()
     const [ showInput, setShowInput ] = useState(false)
     const [ showContextMenu, setShowContextMenu ] = useState(true)
     const [ allSections, setAllSections ] = useState([])
@@ -46,7 +44,9 @@ const NotebookName = ({ fetchNoteBooksList, onClick, isActive, email, name, inde
     const handleNotebookDelete = async () => {
         try {
             await deleteNotebook(email, name)
-            fetchNoteBooksList()
+            console.log("Deleted notebook ", name)
+            setNotebooksCache([])
+            // fetchNoteBooksList()
         } catch (error) {
             console.log("ERRR ", error.message)
         }

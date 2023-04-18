@@ -1,8 +1,10 @@
 import { useRef } from "react";
 import { checkNotebookExistsAlready, createNotebook } from "../../../utils";
 import { useAuth } from "../../../../Context/AuthContext";
+import { useCache } from "../../../../Context/CacheContext";
 
-const AddNoteBookInput = ({ email, fetchNoteBooksList }) => {
+const AddNoteBookInput = ({ email }) => {
+    const { setNotebooksCache } = useCache()
     const inputRef = useRef(null);
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -14,7 +16,8 @@ const AddNoteBookInput = ({ email, fetchNoteBooksList }) => {
             await createNotebook(email, value)
             console.log("Notebook created successfully");
             inputRef.current.value = ''
-            fetchNoteBooksList()
+            setNotebooksCache([])
+            
         } catch (error) {
             console.log("Error ", error.message)
         }

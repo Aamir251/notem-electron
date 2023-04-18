@@ -5,6 +5,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import SecondaryButton from "../../Components/Buttons/SecondaryButton";
 import NotebookSelector from "./Components/NoteBooks/NotebookSelector";
+import { NotebooksProvider } from "../../Context/NotebooksContext";
 
 const SideBar = () => {
     // 0 means dashboard is active
@@ -19,8 +20,10 @@ const SideBar = () => {
                 <SecondaryButton>Log Out</SecondaryButton>
             </div>
             
-            <DashboardSelector isActive={active===0} onClick={() => setActive(0)} wrapperClass={wrapperClass} />
-            <NotebookSelector isActive={active===1} onClick={() => setActive(1)} wrapperClass={wrapperClass} />
+            <NotebooksProvider>
+                <DashboardSelector isActive={active===0} onClick={() => setActive(0)} wrapperClass={wrapperClass} />
+                <NotebookSelector isActive={active===1} onClick={() => setActive(1)} wrapperClass={wrapperClass} />
+            </NotebooksProvider>
             
         </div>
     </aside>
