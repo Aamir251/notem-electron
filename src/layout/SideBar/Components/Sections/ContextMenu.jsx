@@ -1,6 +1,9 @@
 import { useEffect, useRef } from "react"
+import { deleteSection } from "../../../utils"
+import { useAuth } from "../../../../Context/AuthContext"
 
-const ContextMenu = ({ name, setEditName, setShowContext }) => {
+const ContextMenu = ({ setEditName, setShowContext, notebookId, sectionId, fetchSections }) => {
+    const { currentUser } = useAuth()
     let contextRef = useRef(null)
     const showSectionEditForm = () => {
         setEditName(true)
@@ -19,10 +22,19 @@ const ContextMenu = ({ name, setEditName, setShowContext }) => {
 
         return () => document.removeEventListener('click', handleOutsideClick)
     },[])
+
+    const handleDeleteSection = async () => {
+        try {
+            await deleteSection(notebookId, sectionId, currentUser.email)
+            fetchSections()
+        } catch (error) {
+            console.error("error ", error.message)
+        }
+    }
     
     return <ul ref={contextRef}  className="absolute sectionContextMenu bg-white text-victoria z-40 top-0 -right-5">
-        <li onClick={showSectionEditForm} className="context-menu-li heading-five">Edit Notebook </li>
-        <li className="context-menu-li heading-five">Delete Notebook</li>
+        <li onClick={showSectionEditForm} className="context-menu-li heading-five">Edit Section </li>
+        <li onClick={handleDeleteSection} className="context-menu-li heading-five">Delete Section</li>
     </ul>
 }
 

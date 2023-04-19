@@ -1,13 +1,11 @@
 import { useRef, useState } from "react";
 import { ActiveBackground, ActiveMark } from "../..";
-import { Link } from "react-router-dom";
 import NotebookIcon from "../../../../assets/images/NotebookIcon";
 import AddNoteBookInput from "./AddNoteBookInput";
 import { AddIcon } from "../../icons/AddIcon";
 import NoteBooksList from "./NoteBooksList";
 import { useAuth } from "../../../../Context/AuthContext";
-import { getNotebooksList } from "../../../utils";
-import { useCache } from "../../../../Context/CacheContext";
+
 
 const NotebookSelector = ({ isActive, wrapperClass, onClick }) => {
     const ref = useRef()
@@ -17,10 +15,7 @@ const NotebookSelector = ({ isActive, wrapperClass, onClick }) => {
     const handleClick = () => {
         setShowInput((prev) => !prev)
     }
-
-
     
-
     return <div className="relative w-52 mx-auto">
         <div className="flex relative">
             <div onClick={onClick} className={` relative ${wrapperClass}`}>

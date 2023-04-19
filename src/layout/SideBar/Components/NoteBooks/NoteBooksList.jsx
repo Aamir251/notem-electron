@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { deleteNotebook, getSectionsList } from "../../../utils"
 import { boxColors } from "../boxColors"
 import AddSectionForm from "../AddSectionForm"
@@ -11,8 +11,7 @@ const NoteBooksList = ({ email }) => {
     
     const [ currentlySelected, setCurrentlySelected ] = useState(null)
     const { notebooksList } = useNotebooksList()
-    console.log("All Notebooks ", notebooksList);
-    
+    console.log("Notebooks ", notebooksList);
     return (
         <ul className="w-52 mx-auto space-y-3  mt-4">
             {
@@ -22,7 +21,7 @@ const NoteBooksList = ({ email }) => {
                 email={email}
                 isActive={index === currentlySelected}
                 index={index % 3}
-                name={item} 
+                notebook={item}
                 key={item} 
             /> )
             }
@@ -32,10 +31,11 @@ const NoteBooksList = ({ email }) => {
 
 export default NoteBooksList;
 
-const NotebookName = ({ onClick, isActive, email, name, index }) => {
+const NotebookName = ({ onClick, isActive, email, notebook, index }) => {
     const { setNotebooksCache } = useCache()
     const [ showInput, setShowInput ] = useState(false)
     const [ showContextMenu, setShowContextMenu ] = useState(true)
+    
     const [ allSections, setAllSections ] = useState([])
     // addSection(email, name, 'React')
     const handleContextMenu = () => {
@@ -43,25 +43,27 @@ const NotebookName = ({ onClick, isActive, email, name, index }) => {
     }
     const handleNotebookDelete = async () => {
         try {
-            await deleteNotebook(email, name)
-            console.log("Deleted notebook ", name)
+            await deleteNotebook(email, notebook.id)
+            console.log("Deleted notebook ", notebook.name)
             setNotebooksCache([])
-            // fetchNoteBooksList()
         } catch (error) {
             console.log("ERRR ", error.message)
         }
     }
-
+    
     const fetchSections = async () => {
+        setAllSections([])
         try {
-            setAllSections([])
-            const sections = await getSectionsList(email, name)
+            const sections = await getSectionsList(email, notebook.id)
             setAllSections(sections)
+            console.log("Sections ", sections)
         } catch (error) {
             console.log("Error ", error.message);
         }
     }
-
+    useEffect(() => {
+        fetchSections()
+    },[])
     useEffect(() => {
         setShowContextMenu(false)
     },[isActive])
@@ -70,7 +72,7 @@ const NotebookName = ({ onClick, isActive, email, name, index }) => {
             <div className="flex relative justify-between items-center px-2 py-1.5 pt-2">
                 <div onContextMenu={handleContextMenu} className="space-x-3 flex items-center w-full">
                     <span className={`inline-block w-1 h-1 bg-white z-10 ${boxColors[index]}`}></span>
-                    <span className="inline-block z-10 heading-five semibold cursor-pointer">{name}</span>
+                    <span className="inline-block z-10 heading-five semibold cursor-pointer">{notebook.name}</span>
                 </div>
                 { isActive && <motion.span
                     onClick={() => setShowInput((prev) => !prev) }
@@ -111,7 +113,7 @@ const NotebookName = ({ onClick, isActive, email, name, index }) => {
             {/* the form */}
             <AnimatePresence>
                 {showInput && isActive && <AddSectionForm 
-                    notebookName={name} 
+                    notebook={notebook}
                     setShowInput={setShowInput} 
                     email={email}
                     fetchSections={fetchSections}
@@ -121,9 +123,9 @@ const NotebookName = ({ onClick, isActive, email, name, index }) => {
             {/* The sections Names */}
             
             { isActive && <SectionsList
-                notebookName={name}
-                allSections={allSections} 
-                fetchSections={fetchSections}  
+                notebookId={notebook.id}
+                allSections={allSections}
+                fetchSections={fetchSections}
             />}
         </li>
     )

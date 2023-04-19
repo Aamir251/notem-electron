@@ -30,7 +30,7 @@ export const NotebooksProvider = ({ children }) => {
         if(currentUser?.email) {
             fetchNotebooks()
         }
-    },[currentUser, notebooksCache.length])
+    },[currentUser, notebooksCache])
 
     return <NotebooksContext.Provider value={{ notebooksList, setNotebooksList }}>
         {children}

@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { checkIfSectionExists, createNewSection } from '../../utils';
 import { useEffect, useRef } from 'react';
 
-const AddSectionForm = ({ notebookName, setShowInput, email, fetchSections }) => {
+const AddSectionForm = ({ notebook, setShowInput, email, fetchSections }) => {
 
     const inputRef = useRef(null)
     const handleSubmit = async (e) => {
@@ -12,8 +12,8 @@ const AddSectionForm = ({ notebookName, setShowInput, email, fetchSections }) =>
         try {
             // check if a section with that sectionName already exists
             // if it exists, it would throw an error
-            await checkIfSectionExists(email, notebookName, sectionName)
-            await createNewSection(email, notebookName, sectionName)
+            await checkIfSectionExists(email, notebook.id, sectionName)
+            await createNewSection(email, notebook.id, sectionName)
 
             inputRef.current.value = ''
 

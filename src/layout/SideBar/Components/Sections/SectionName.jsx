@@ -8,7 +8,7 @@ import RightArrow from "../../icons/RIghtArrow";
 import {useAuth} from "../../../../Context/AuthContext";
 import EditSectionInput from "./EditSectionInput";
 
-const SectionName = ({ notebookName, details, fetchSections }) => {
+const SectionName = ({ notebookId, details, fetchSections }) => {
     const { currentUser } = useAuth()
     const [ isActive, setIsActive ] = useState(false)
     const [ showContext, setShowContext ] = useState(false);
@@ -40,7 +40,7 @@ const SectionName = ({ notebookName, details, fetchSections }) => {
             >
                 {editName && isActive ? <EditSectionInput 
                         sectionDetails={details}
-                        notebookName={notebookName}
+                        notebookId={notebookId}
                         email={currentUser.email}
                         setEditName={setEditName}
                         fetchSections={fetchSections}
@@ -56,7 +56,9 @@ const SectionName = ({ notebookName, details, fetchSections }) => {
             {/* the context manu */}
             {showContext && isActive &&  <ContextMenu
                 setEditName={setEditName}
-                name={details.name}
+                notebookId={notebookId}
+                sectionId={details.id}
+                fetchSections={fetchSections}
                 setShowContext={setShowContext}
             /> }
         </motion.li>

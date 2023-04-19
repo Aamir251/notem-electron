@@ -23,13 +23,12 @@ export const checkNotebookExistsAlready = async (email, notebookName) => {
 }
 // create a new notebook
 export const createNotebook = async (email, notebookName) => {
-    await setDoc(
-        doc(
+    await addDoc(
+        collection(
             db,
             "usersDocs",
             email,
             "Notebooks",
-            notebookName
         ),{
             name : notebookName
         }
@@ -43,21 +42,25 @@ export const getNotebooksList = async (email) => {
     let notebooks = []
     const querySnapshot = await getDocs(q)
     querySnapshot.forEach(doc => {
-        notebooks.push(doc.get('name'))
+        const notebook = {
+            id : doc.id,
+            name : doc.get('name')
+        }
+        notebooks.push(notebook)
     })
 
     return [...notebooks]
 }
 
 // create a new section
-export const createNewSection = async (email, notebook, sectionName) => {
+export const createNewSection = async (email, notebookId, sectionName) => {
     await addDoc(
         collection(
             db,
             "usersDocs",
             email,
             "Notebooks",
-            notebook,
+            notebookId,
             "Sections",
         ),{
             name : sectionName
@@ -66,14 +69,14 @@ export const createNewSection = async (email, notebook, sectionName) => {
 
 }
 // check if a section alredy exists with that name or not
-export const checkIfSectionExists = async (email, notebookName, sectionName ) => {
+export const checkIfSectionExists = async (email, notebookId, sectionName ) => {
     const q = query(
         collection(
             db,
             "usersDocs",
             email,
             "Notebooks",
-            notebookName,
+            notebookId,
             "Sections"
         ),
         where("name","==",sectionName 
@@ -103,14 +106,14 @@ export const getSectionsList = async (email, notebookName) => {
 
 
 // delete an entire notebook collection
-export const deleteNotebook = async (email, notebookName) => {
+export const deleteNotebook = async (email, notebookId) => {
     const q = query(
         collection(
             db,
             "usersDocs",
             email,
             "Notebooks",
-            notebookName,
+            notebookId,
             "Sections"
         ))
     const querySnapshot = await getDocs(q)
@@ -120,7 +123,7 @@ export const deleteNotebook = async (email, notebookName) => {
             "usersDocs",
             email,
             "Notebooks",
-            notebookName,
+            notebookId,
             "Sections",
             document.id
         ))
@@ -131,20 +134,20 @@ export const deleteNotebook = async (email, notebookName) => {
         "usersDocs",
         email,
         "Notebooks",
-        notebookName,
+        notebookId,
     ))
 }
 
 export const generateSlug = (text) => text.toLowerCase().split(" ").join("-");
 
 // update the name of a section
-export const updateSectionName = async (email, notebookName, sectionId, newName ) => {
+export const updateSectionName = async (email, notebookId, sectionId, newName ) => {
     const updateRef = doc(
         db,
         "usersDocs",
         email,
         "Notebooks",
-        notebookName,
+        notebookId,
         "Sections",
         sectionId
     )
@@ -152,4 +155,44 @@ export const updateSectionName = async (email, notebookName, sectionId, newName 
         name : newName
     })
 
+}
+
+
+export const deleteSection = async (notebookId, sectionId, email) => {
+    const deleteRef = query(
+        collection(
+           db,
+           "usersDocs",
+           email,
+           "Notebooks",
+           notebookId,
+           "Sections",
+           sectionId,
+           "Pages"
+        ));
+
+    const querySnapshot = await getDocs(deleteRef)
+
+    if(querySnapshot.docs.length > 0) {
+        querySnapshot.docs.forEach(async document => {
+            await deleteDoc(doc(
+                db,
+                "usersDocs",
+                email,
+                "Notebooks",
+                notebookId,
+                "Sections",
+                document.id
+            ))
+        })
+    }
+    await deleteDoc(doc(
+        db,
+        "usersDocs",
+        email,
+        "Notebooks",
+        notebookId,
+        "Sections",
+        sectionId
+    ))
 }

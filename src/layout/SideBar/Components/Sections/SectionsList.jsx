@@ -5,11 +5,7 @@ import { sectionsVariants } from "../variants";
 
 import SectionName from "./SectionName";
 
-const SectionsList = ({ notebookName, allSections, fetchSections }) => {
-
-    useEffect(() => {
-        fetchSections()
-    },[])
+const SectionsList = ({ notebookId, allSections, fetchSections }) => {
 
     return (
             allSections.length > 0 
@@ -20,9 +16,8 @@ const SectionsList = ({ notebookName, allSections, fetchSections }) => {
                 className="w-full mt-5 space-y-3 pl-6">
                 {
                     allSections.map(section => <SectionName
-                    
-                        notebookName={notebookName}
                         fetchSections={fetchSections}
+                        notebookId={notebookId}
                         key={section.id}
                         details={section}  
                     /> )

@@ -6,7 +6,7 @@ const Loader = ({ width, height }) => {
                 width : `${width}px`, 
                 height : `${height}px` 
             }} 
-        class="loader block"></span>
+        className="loader block"></span>
     )
 }
 
