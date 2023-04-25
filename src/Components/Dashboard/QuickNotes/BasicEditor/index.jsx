@@ -1,12 +1,7 @@
 import "../../../../assets/css/basicEditor.css"
-import "quill/dist/quill.snow.css";
 import { useEffect, useRef, useState } from "react";
 import { saveQuickNote, hideMultipleEditors } from "./utils";
-import { useDebouncer } from "../../../../hooks/useDebouncer";
-import ReactQuill from "react-quill";
 import Header from '@editorjs/header'; 
-import List from '@editorjs/list'; 
-import { createReactEditorJS } from 'react-editor-js'
 import EditorJS from '@editorjs/editorjs';
 
 const BasicEditor = ({ email, notes }) => {

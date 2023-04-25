@@ -30,7 +30,7 @@ const router = createBrowserRouter([
         element : <Notebooks />
       },
       {
-        path : "/notesbooks/notes/:slug",
+        path : "/notesbooks/:notebookId/sections/:sectionId",
         element : <AllNotes />
       }
     ]

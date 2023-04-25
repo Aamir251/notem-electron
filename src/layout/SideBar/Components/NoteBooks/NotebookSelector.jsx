@@ -5,6 +5,7 @@ import AddNoteBookInput from "./AddNoteBookInput";
 import { AddIcon } from "../../icons/AddIcon";
 import NoteBooksList from "./NoteBooksList";
 import { useAuth } from "../../../../Context/AuthContext";
+import { SectionsLoadingProvider } from "../../../../Context/SectionsLoadingContext";
 
 
 const NotebookSelector = ({ isActive, wrapperClass, onClick }) => {
@@ -42,10 +43,12 @@ const NotebookSelector = ({ isActive, wrapperClass, onClick }) => {
             {/* <RightClickMenu /> */}
 
         </div>
-        { isActive && <NoteBooksList
-                email={currentUser?.email} 
-            /> }
-        {/* <AddNoteBookInput /> */}
+        <SectionsLoadingProvider>
+            { isActive && <NoteBooksList
+                    email={currentUser?.email} 
+                    /> }
+            {/* <AddNoteBookInput /> */}
+        </SectionsLoadingProvider>
     </div>
 }
 

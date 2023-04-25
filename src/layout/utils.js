@@ -54,7 +54,7 @@ export const getNotebooksList = async (email) => {
 
 // create a new section
 export const createNewSection = async (email, notebookId, sectionName) => {
-    await addDoc(
+    const resp = await addDoc(
         collection(
             db,
             "usersDocs",
@@ -66,6 +66,7 @@ export const createNewSection = async (email, notebookId, sectionName) => {
             name : sectionName
         }
     )
+
 
 }
 // check if a section alredy exists with that name or not

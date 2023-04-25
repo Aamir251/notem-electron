@@ -18,7 +18,7 @@ const SectionName = ({ notebookId, details, fetchSections }) => {
     const path = location.pathname;
     const pathsArr = path.split("/")
     useEffect(() => {
-            if(pathsArr.includes(slug)) {
+            if(pathsArr.includes(details.id)) {
                 setIsActive(true)
             } else {
                 setIsActive(false)
@@ -45,7 +45,7 @@ const SectionName = ({ notebookId, details, fetchSections }) => {
                         setEditName={setEditName}
                         fetchSections={fetchSections}
                     /> :  <Link
-                        to={ `/notesbooks/notes/${slug}`}
+                        to={ `/notesbooks/${notebookId}/sections/${details.id}`}
                     >
                     {details.name}
                 </Link>}

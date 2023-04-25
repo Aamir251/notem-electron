@@ -7,6 +7,7 @@ import { AddIcon } from "../../icons/AddIcon"
 import SectionsList from "../Sections/SectionsList"
 import { useNotebooksList } from "../../../../Context/NotebooksContext"
 import { useCache } from "../../../../Context/CacheContext"
+import { SectionsLoadingProvider, useSectionsLoading } from "../../../../Context/SectionsLoadingContext"
 const NoteBooksList = ({ email }) => {
     
     const [ currentlySelected, setCurrentlySelected ] = useState(null)
@@ -35,8 +36,13 @@ const NotebookName = ({ onClick, isActive, email, notebook, index }) => {
     const { setNotebooksCache } = useCache()
     const [ showInput, setShowInput ] = useState(false)
     const [ showContextMenu, setShowContextMenu ] = useState(true)
-    
-    const [ allSections, setAllSections ] = useState([])
+
+    const [ allSections, setAllSections ] = useState([]);
+    const {
+        sectionsLoading,
+        setSectionsLoading
+    } = useSectionsLoading()
+
     // addSection(email, name, 'React')
     const handleContextMenu = () => {
         setShowContextMenu(true)
@@ -44,7 +50,6 @@ const NotebookName = ({ onClick, isActive, email, notebook, index }) => {
     const handleNotebookDelete = async () => {
         try {
             await deleteNotebook(email, notebook.id)
-            console.log("Deleted notebook ", notebook.name)
             setNotebooksCache([])
         } catch (error) {
             console.log("ERRR ", error.message)
@@ -52,11 +57,12 @@ const NotebookName = ({ onClick, isActive, email, notebook, index }) => {
     }
     
     const fetchSections = async () => {
-        setAllSections([])
+        setSectionsLoading(true)
         try {
             const sections = await getSectionsList(email, notebook.id)
             setAllSections(sections)
             console.log("Sections ", sections)
+            setSectionsLoading(false)
         } catch (error) {
             console.log("Error ", error.message);
         }
@@ -123,6 +129,7 @@ const NotebookName = ({ onClick, isActive, email, notebook, index }) => {
             {/* The sections Names */}
             
             { isActive && <SectionsList
+                sectionsLoading={sectionsLoading}
                 notebookId={notebook.id}
                 allSections={allSections}
                 fetchSections={fetchSections}
