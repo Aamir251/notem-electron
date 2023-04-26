@@ -11,22 +11,26 @@ const AllNotes = () => {
     const [ loadingNotes, setLoadingNotes ] = useState(true)
     const [ allNotes, setAllNotes ] = useState([])
     const { notebookId, sectionId } = params;
+    const [ isNewNote, setIsNewNote ] = useState(false)
+    const [ showNoteEditor, setShowNoteEditor ] = useState(false)
+
+    const getNotes = async () => {
+        setLoadingNotes(true)
+        setAllNotes([])
+        try {
+            const resp = await fetchNotes(currentUser.email, notebookId, sectionId )
+            
+            setAllNotes(resp)
+        } catch (error) {
+           console.log("ERRORRRR ", error.message);
+           setAllNotes([])
+        } finally {
+            setLoadingNotes(false)
+        }
+    }
+
     // console.log("params ", params);
     useEffect(() => {
-
-        const getNotes = async () => {
-            setLoadingNotes(true)
-            try {
-                const resp = await fetchNotes(currentUser.email, notebookId, sectionId )
-                
-                setAllNotes(resp)
-            } catch (error) {
-               console.log("ERRORRRR ", error.message);
-               setAllNotes([])
-            } finally {
-                setLoadingNotes(false)
-            }
-        }
 
         if(currentUser?.email && notebookId && sectionId) {
             getNotes()
@@ -34,14 +38,20 @@ const AllNotes = () => {
         
     },[params, currentUser, notebookId, sectionId])
 
-    const [ showNoteEditor, setShowNoteEditor ] = useState(false)
     
     return (
         <section className={`${allNotes.length > 0 && 'grid'} grid-cols-[250px_auto] h-full`}>
             {
                 loadingNotes ?  <div className="h-full flex items-center justify-center ">
                     <Loader  height={35} width={35} />
-                </div> : <NotesWrapper showNoteEditor={showNoteEditor} setShowNoteEditor={setShowNoteEditor} allNotes={allNotes} />
+                </div> : <NotesWrapper
+                    showNoteEditor={showNoteEditor}
+                    setShowNoteEditor={setShowNoteEditor}
+                    allNotes={allNotes}
+                    isNewNote={isNewNote}
+                    setIsNewNote={setIsNewNote}
+                    getNotes={getNotes}
+                />
             }
         </section>
     )

@@ -1,8 +1,7 @@
-import { collection, getDocs } from "firebase/firestore"
+import { addDoc, collection, getDocs } from "firebase/firestore"
 import { db } from "../firebase"
 
 export const fetchNotes = async ( email, notebookId, sectionId ) => {
-    console.log(`email ${email}, notebookId ${notebookId} sectionId ${sectionId}`);
     const notesRef = collection(
         db,
         "usersDocs",
@@ -20,7 +19,10 @@ export const fetchNotes = async ( email, notebookId, sectionId ) => {
         querySnapshot.docs.forEach(doc => {
             const page = {
                 id : doc.id,
-                data : doc.get('data')
+                noteTitle : doc.get('noteTitle'),
+                time : doc.get('time'),
+                version : doc.get('version'),
+                blocks : doc.get('blocks')
             }
             pages.push(page)
         })
@@ -40,4 +42,27 @@ export const hideMultipleEditors = (ref) => {
     }
 
     toolBarstoHide.forEach(hide)
+}
+
+export const handleCreateNote = async (data, email, notebookId, sectionId) => {
+    console.log('data ', data);
+
+    if(data.noteTitle === '') {
+        throw new Error('Title cannot be empty')
+    }
+
+    const docRef = collection(
+        db,
+        "usersDocs",
+        email,
+        "Notebooks",
+        notebookId,
+        "Sections",
+        sectionId,
+        "Notes"
+    )
+    await addDoc(docRef, {
+        ...data
+    })
+
 }

@@ -64,4 +64,5 @@ input {
   height: 100%;
   max-height: calc(100% - 100px);
   overflow-y: scroll;
+  overflow-x: hidden;
  }

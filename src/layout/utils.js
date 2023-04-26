@@ -169,7 +169,7 @@ export const deleteSection = async (notebookId, sectionId, email) => {
            notebookId,
            "Sections",
            sectionId,
-           "Pages"
+           "Notes"
         ));
 
     const querySnapshot = await getDocs(deleteRef)

@@ -1,19 +1,20 @@
 import AddNote from "./AddNote";
 
-const NotesList = ({ setShowNoteEditor, allNotes }) => {
+const NotesList = ({ allNotes }) => {
     
-    if(allNotes.length === 0) {
-        return <div className="flex flex-col items-center h-full justify-between py-4">
-            <h3>No Notes Found</h3>
-            
-
-            <AddNote setShowNoteEditor={setShowNoteEditor} />
-        </div>
-    }
+   
 
     return <ul>
-        All Notes here
+        {
+            allNotes.map(note => <NoteSelector key={note.id} note={note} />)
+        }
     </ul>
 }
 
 export default NotesList;
+
+const NoteSelector = ({ note }) => {
+    return <li>
+        {note.noteTitle}
+    </li>
+}
