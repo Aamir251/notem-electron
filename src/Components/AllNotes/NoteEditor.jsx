@@ -1,18 +1,21 @@
 import Header from '@editorjs/header'; 
 import EditorJS from '@editorjs/editorjs';
 import { useEffect, useRef, useState } from 'react';
-import { handleCreateNote, handleSaveNote, hideMultipleEditors } from '../utils';
+import { handleCreateNote, handleUpdateNote, hideMultipleEditors } from '../utils';
 import { useAuth } from '../../Context/AuthContext';
 import { useParams } from 'react-router-dom';
 
-const NoteEditor = ({ isNewNote, setShowNoteEditor, getNotes }) => {
+const NoteEditor = ({ isNewNote, setShowNoteEditor, getNotes, selectedNote }) => {
     const { currentUser } = useAuth()
     const EDITTOR_HOLDER_ID = 'NOTE_EDITOR';
-    let noteTitleRef = useRef('')
+    const [ noteTitle, setNoteTitle ] = useState(isNewNote ? "" : selectedNote.noteTitle)
+
     const ejInstance = useRef();
     const editorRef = useRef(null)
-
-    const [editorData, setEditorData] = useState()
+    // if isNewNote is true, it means new note is being created, so 
+    // we don't load any default data. If it is false, means an existing note is 
+    // being edited so we load initial data i.e. selectedNote
+    const [editorData, setEditorData] = useState(isNewNote ? "" : selectedNote)
     let isSaved = true;
     let timeoutId;
     // This will run only once
@@ -37,14 +40,27 @@ const NoteEditor = ({ isNewNote, setShowNoteEditor, getNotes }) => {
     const onSaveNote = async () => {
         
         try {
-            await handleCreateNote({
-                ...editorData,
-                noteTitle : noteTitleRef.current.value
-            }, currentUser.email, notebookId, sectionId )
-            setShowNoteEditor(false)
+            if(isNewNote) {
+                // means we are trying to create a new note
+                await handleCreateNote({
+                    ...editorData,
+                    noteTitle,
+                }, currentUser.email, notebookId, sectionId )
+            } else {
+                // we are trying to update an existing note
+                await handleUpdateNote(
+                    {
+                        ...editorData,
+                        noteTitle,
+                    }, currentUser.email, notebookId, sectionId, selectedNote.id )
+            }
+
+            console.log("notes updated ");
+            // setShowNoteEditor(false)
             getNotes()
 
         } catch (error) {
+            // ADD TOAST HERE
             console.error("Error Saving ", error.message)
         }
     }
@@ -84,14 +100,15 @@ const NoteEditor = ({ isNewNote, setShowNoteEditor, getNotes }) => {
             console.log("error ", error.message);
         }
       };
-    return <div className="absolute bg-white w-full h-full top-0 left-0">
+    return <div className="absolute bg-white w-full h-full top-0 left-0 z-30">
         <div className='relative newNote-editor'>
             <button onClick={() => setShowNoteEditor(false) }>Close</button>
             <div className="h-full wrapper overflow-y-scroll px-2 pb-20">
                 <input
                     required
                     placeholder='Title'
-                    ref={noteTitleRef}
+                    onChange={(e) => setNoteTitle(e.target.value) }
+                    value={noteTitle }
                     className='px-4 py-3 heading-two w-full max-w-[700px] mx-auto block'
 
                 />

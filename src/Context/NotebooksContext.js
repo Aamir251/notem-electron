@@ -14,12 +14,10 @@ export const NotebooksProvider = ({ children }) => {
         const fetchNotebooks = async () => {
             setNotebooksList([])
             if(notebooksCache.length > 0) {
-                console.log("loaded notebooks from cache")
                 setNotebooksList(notebooksCache)
                 return
             }
             try {
-                console.log("Fetching notebooks from firebase")
                 const notebooksList = await getNotebooksList(currentUser.email)
                 setNotebooksList(notebooksList)
                 setNotebooksCache(notebooksList)

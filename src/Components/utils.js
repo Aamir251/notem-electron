@@ -1,4 +1,4 @@
-import { addDoc, collection, getDocs } from "firebase/firestore"
+import { addDoc, collection, doc, getDocs, updateDoc } from "firebase/firestore"
 import { db } from "../firebase"
 
 export const fetchNotes = async ( email, notebookId, sectionId ) => {
@@ -45,7 +45,6 @@ export const hideMultipleEditors = (ref) => {
 }
 
 export const handleCreateNote = async (data, email, notebookId, sectionId) => {
-    console.log('data ', data);
 
     if(data.noteTitle === '') {
         throw new Error('Title cannot be empty')
@@ -62,7 +61,25 @@ export const handleCreateNote = async (data, email, notebookId, sectionId) => {
         "Notes"
     )
     await addDoc(docRef, {
-        ...data
+        blocks : data.blocks
     })
 
+}
+
+export const handleUpdateNote = async (data, email, notebookId, sectionId, noteId) => {
+    const docRef = doc(
+        db,
+        "usersDocs",
+        email,
+        "Notebooks",
+        notebookId,
+        "Sections",
+        sectionId,
+        "Notes",
+        noteId
+    )
+    await updateDoc(docRef, {
+        blocks : data.blocks,
+        noteTitle : data.noteTitle
+    })
 }

@@ -2,9 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import Header from '@editorjs/header'; 
 import EditorJS from '@editorjs/editorjs';
 import { hideMultipleEditors } from "../../utils";
+import "../css/note-viewer.css";
+import { motion } from "framer-motion";
 
 const NoteViewer = ({ selectedNote }) => {
-    console.log("Selected Note ", selectedNote);
     const EDITTOR_HOLDER_ID = 'NOTE_VIEWER';
     const ejInstance = useRef();
     const editorRef = useRef(null)
@@ -52,7 +53,7 @@ const NoteViewer = ({ selectedNote }) => {
         try {
             await editor.isReady;
             timeoutId = setTimeout(() => {
-                hideMultipleEditors(editorRef.current)
+                editorRef?.current && hideMultipleEditors(editorRef.current)
             }, 50)
 
         } catch (error) {
@@ -60,12 +61,22 @@ const NoteViewer = ({ selectedNote }) => {
         }
         
     };
-    return <div id={selectedNote.id} className=" bg-white w-full ">
+    return <motion.div initial={{
+        opacity : 0
+    }} 
+    animate = {{
+        opacity : 1,
+        transition : {
+            duraiton : 0.6,
+            ease : "easeIn"
+        }
+    }}
+    id={selectedNote.id} className="note-viewer bg-white-lilac h-full  w-full  px-3 py-2">
         <h1 className="heading-two">{selectedNote.noteTitle}</h1>
         <div className='relative'>
             <div ref={editorRef} id={EDITTOR_HOLDER_ID}> </div>
         </div>
-    </div>
+    </motion.div>
 }
 
 export default NoteViewer;

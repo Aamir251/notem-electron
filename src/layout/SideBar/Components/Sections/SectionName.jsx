@@ -17,6 +17,7 @@ const SectionName = ({ notebookId, details, fetchSections }) => {
     const location = useLocation()
     const path = location.pathname;
     const pathsArr = path.split("/")
+    
     useEffect(() => {
             if(pathsArr.includes(details.id)) {
                 setIsActive(true)
@@ -24,7 +25,7 @@ const SectionName = ({ notebookId, details, fetchSections }) => {
                 setIsActive(false)
             }
             setShowContext(false)
-    },[path])
+    },[location])
 
     
     
@@ -68,7 +69,7 @@ const SectionName = ({ notebookId, details, fetchSections }) => {
 export default SectionName;
 
 const ActiveMark = () => {
-    return <motion.span layoutId="active-notes-mark" className="absolute h-full w-0.5 bg-[#FFABAB] rounded-sm left-0">
+    return <motion.span layoutId="active-section-mark" className="absolute h-full w-0.5 bg-[#FFABAB] rounded-sm left-0">
         
     </motion.span>
 }

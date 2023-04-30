@@ -14,7 +14,6 @@ const AddNoteBookInput = ({ email }) => {
         try {
             await checkNotebookExistsAlready(email, value)
             await createNotebook(email, value)
-            console.log("Notebook created successfully");
             inputRef.current.value = ''
             setNotebooksCache([])
             

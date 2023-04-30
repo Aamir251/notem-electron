@@ -12,7 +12,6 @@ const NoteBooksList = ({ email }) => {
     
     const [ currentlySelected, setCurrentlySelected ] = useState(null)
     const { notebooksList } = useNotebooksList()
-    console.log("Notebooks ", notebooksList);
     return (
         <ul className="w-52 mx-auto space-y-3  mt-4">
             {
@@ -61,7 +60,6 @@ const NotebookName = ({ onClick, isActive, email, notebook, index }) => {
         try {
             const sections = await getSectionsList(email, notebook.id)
             setAllSections(sections)
-            console.log("Sections ", sections)
             setSectionsLoading(false)
         } catch (error) {
             console.log("Error ", error.message);

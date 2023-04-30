@@ -27,7 +27,6 @@ const BasicEditor = ({ email, notes }) => {
       const saveData = async () => {
         try {
           await saveQuickNote(editorData, email)
-          console.log("DAta saved" );
         } catch (error) {
           console.log("Error ", error.message);
         }

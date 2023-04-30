@@ -18,6 +18,8 @@ module.exports = {
         "albaster" : "#FCFCFC",
         "butterfly-bush" : "#5A559C",
         "lilac" : "#FFABAB",
+        "waterloo" : "#787C99",
+        "white-lilac" : "#F4F5FB"
       },
       borderColor : {
         "victoria" : "#4D478D",

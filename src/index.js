@@ -9,9 +9,9 @@ import SignUp from './pages/Authentication/Signup';
 import Authentication from './pages/Authentication';
 import { AuthProvider } from './Context/AuthContext';
 import Dashboard from './Components/Dashboard';
-import Notebooks from './Components/Notebooks';
 import AllNotes from './Components/AllNotes';
 import { CacheProvider } from './Context/CacheContext';
+import NotesProvider from './Context/NotesContext';
 
 const router = createBrowserRouter([
   // the root path consist of dashboard, if user is not logged in, 
@@ -25,10 +25,7 @@ const router = createBrowserRouter([
         path : "/dashboard",
         element : <Dashboard />
       },
-      {
-        path : "/notebooks",
-        element : <Notebooks />
-      },
+      
       {
         path : "/notesbooks/:notebookId/sections/:sectionId",
         element : <AllNotes />
@@ -56,7 +53,9 @@ root.render(
   <React.StrictMode>
       <AuthProvider>
         <CacheProvider>
-          <RouterProvider router={router} />
+          <NotesProvider>
+            <RouterProvider router={router} />
+          </NotesProvider>
         </CacheProvider>
       </AuthProvider>
   </React.StrictMode>
