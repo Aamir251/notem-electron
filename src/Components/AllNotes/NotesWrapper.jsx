@@ -1,11 +1,8 @@
-import { useEffect, useState } from "react"
 import AddNote from "./AddNote"
-import AddNotesButton from "./AddNote"
 import NoteEditor from "./NoteEditor"
 import NotesList from "./NotesList"
 import NoteViewer from "./NoteViewer"
 import { motion } from "framer-motion"
-import EditNoteButton from "./EditNoteButton"
 import { useNotes } from "../../Context/NotesContext"
 
 const NotesWrapper = ({

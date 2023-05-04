@@ -1,3 +1,12 @@
 .note-viewer .ce-block__content{
     max-width: 100%;
 }
+
+.note-viewer {
+    color: #787C99;
+}
+
+.note-viewer h1, .note-viewer h2, .note-viewer h3, .note-viewer h4, .note-viewer h5 {
+    color: #4D478D;
+    font-weight: 600;
+}

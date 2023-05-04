@@ -38,7 +38,7 @@ const NotebookSelector = ({ isActive, wrapperClass, onClick }) => {
                 </span>
             </span>}
             {
-                showInput && <AddNoteBookInput  email={currentUser?.email} />
+                showInput && isActive && <AddNoteBookInput  email={currentUser?.email} />
             }
             {/* <RightClickMenu /> */}
 

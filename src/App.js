@@ -30,6 +30,8 @@ function App() {
   useEffect(() => {
     if(!currentUser?.email) {
       navigate("/auth/login")
+    } else {
+      navigate("/dashboard")
     }
   },[currentUser])
 

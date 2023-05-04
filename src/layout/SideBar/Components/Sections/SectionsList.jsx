@@ -4,8 +4,12 @@ import { motion } from 'framer-motion';
 import { sectionsVariants } from "../variants";
 
 import SectionName from "./SectionName";
+import { useSectionsLoading } from "../../../../Context/SectionsLoadingContext";
 
-const SectionsList = ({ notebookId, allSections, fetchSections, sectionsLoading }) => {
+const SectionsList = ({ notebookId, allSections, fetchSections }) => {
+    const {
+        sectionsLoading,
+    } = useSectionsLoading()
     console.log(`current loading state `, sectionsLoading);
     return (
             sectionsLoading === true 

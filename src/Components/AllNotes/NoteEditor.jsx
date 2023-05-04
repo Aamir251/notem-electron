@@ -1,15 +1,22 @@
 import Header from '@editorjs/header'; 
+import List from '@editorjs/list';
 import EditorJS from '@editorjs/editorjs';
+import Embed from '@editorjs/embed';
 import { useEffect, useRef, useState } from 'react';
 import { handleCreateNote, handleUpdateNote, hideMultipleEditors } from '../utils';
 import { useAuth } from '../../Context/AuthContext';
 import { useParams } from 'react-router-dom';
+const LinkTool = require('@editorjs/link');
+const Checklist = require('@editorjs/checklist');
+
+
 
 const NoteEditor = ({ isNewNote, setShowNoteEditor, getNotes, selectedNote }) => {
     const { currentUser } = useAuth()
     const EDITTOR_HOLDER_ID = 'NOTE_EDITOR';
     const [ noteTitle, setNoteTitle ] = useState(isNewNote ? "" : selectedNote.noteTitle)
-
+    
+    const [imgUrl, setImgUrl] = useState(null);
     const ejInstance = useRef();
     const editorRef = useRef(null)
     // if isNewNote is true, it means new note is being created, so 
@@ -56,7 +63,7 @@ const NoteEditor = ({ isNewNote, setShowNoteEditor, getNotes, selectedNote }) =>
             }
 
             console.log("notes updated ");
-            // setShowNoteEditor(false)
+            setShowNoteEditor(false)
             getNotes()
 
         } catch (error) {
@@ -86,7 +93,22 @@ const NoteEditor = ({ isNewNote, setShowNoteEditor, getNotes, selectedNote }) =>
                     class : Header,
                     inlineToolbar : true,
                 },
-                
+                linkTool: {
+                    class: LinkTool,
+                },
+                checklist: {
+                    class: Checklist,
+                    inlineToolbar: true,
+                },
+                list: {
+                    class: List,
+                    inlineToolbar: true,
+                    config: {
+                      defaultStyle: 'unordered'
+                    }
+                },
+                embed: Embed,
+               
             }, 
         });
         

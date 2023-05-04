@@ -3,21 +3,28 @@ import { useEffect, useRef, useState } from "react";
 import { saveQuickNote, hideMultipleEditors } from "./utils";
 import Header from '@editorjs/header'; 
 import EditorJS from '@editorjs/editorjs';
+import List from '@editorjs/list';
+import Embed from '@editorjs/embed';
+const LinkTool = require('@editorjs/link');
+const Checklist = require('@editorjs/checklist');
+
 
 const BasicEditor = ({ email, notes }) => {
     const EDITTOR_HOLDER_ID = 'editorjs';
     
     const ejInstance = useRef();
     const editorRef = useRef(null)
-  
-    const [editorData, setEditorData] = useState(notes)
- 
+
+    // if notes is available load, existing note else load empty editor
+    const [editorData, setEditorData] = useState(notes ?? '')
+    let timeoutId;
     // This will run only once
     useEffect(() => {
         if (!ejInstance.current) {
             initEditor();
           }
           return () => {
+            clearTimeout(timeoutId)
             // ejInstance.current.destroy();
             ejInstance.current = null;
           }
@@ -34,14 +41,15 @@ const BasicEditor = ({ email, notes }) => {
 
       editorData?.blocks && saveData()
     },[editorData])
-    const initEditor = () => {
+    const initEditor = async () => {
         const editor = new EditorJS({
           holder: EDITTOR_HOLDER_ID,
+          placeholder : "Create your quick note here",
           logLevel: "ERROR",
           data: editorData,
           onReady: () => {
             ejInstance.current = editor;
-            hideMultipleEditors(editorRef.current)
+            
           },
           onChange: async () => {
             let content = await editor.saver.save();
@@ -50,10 +58,34 @@ const BasicEditor = ({ email, notes }) => {
           },
           autofocus: true,
           tools: { 
-            header: Header, 
+            header: Header,
+            linkTool: {
+              class: LinkTool,
+            },
+            checklist: {
+                class: Checklist,
+                inlineToolbar: true,
+            },
+            list: {
+                class: List,
+                inlineToolbar: true,
+                config: {
+                  defaultStyle: 'unordered'
+                }
+            },
           }, 
         });
+
+        try {
+          await editor.isReady
+          timeoutId = setTimeout(() => {
+            hideMultipleEditors(editorRef.current)
+          }, 50)
+        } catch (error) {
+          console.log("error ", error.message);
+        }
       };
+      
       return <>
         {/* <div ref={wrapperRef} className="border border-kimberly/30 h-full rounded-sm pb-2"> */}
         
@@ -67,7 +99,7 @@ const BasicEditor = ({ email, notes }) => {
             }}
             /> */}
 
-        <div className="border h-full overflow-scroll px-2 pb-0">
+        <div className="border h-full quick-note-editor overflow-scroll px-2 pb-0">
             <div ref={editorRef} id={EDITTOR_HOLDER_ID}> </div>
         </div>
 

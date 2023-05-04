@@ -7,7 +7,8 @@ import { AddIcon } from "../../icons/AddIcon"
 import SectionsList from "../Sections/SectionsList"
 import { useNotebooksList } from "../../../../Context/NotebooksContext"
 import { useCache } from "../../../../Context/CacheContext"
-import { SectionsLoadingProvider, useSectionsLoading } from "../../../../Context/SectionsLoadingContext"
+import { useSectionsLoading } from "../../../../Context/SectionsLoadingContext"
+import { useAuth } from "../../../../Context/AuthContext"
 const NoteBooksList = ({ email }) => {
     
     const [ currentlySelected, setCurrentlySelected ] = useState(null)
@@ -31,14 +32,15 @@ const NoteBooksList = ({ email }) => {
 
 export default NoteBooksList;
 
-const NotebookName = ({ onClick, isActive, email, notebook, index }) => {
+const NotebookName = ({ onClick, isActive, notebook, index }) => {
+    const { currentUser } = useAuth()
+    const { email } = currentUser
     const { setNotebooksCache } = useCache()
     const [ showInput, setShowInput ] = useState(false)
     const [ showContextMenu, setShowContextMenu ] = useState(true)
 
     const [ allSections, setAllSections ] = useState([]);
     const {
-        sectionsLoading,
         setSectionsLoading
     } = useSectionsLoading()
 
@@ -62,15 +64,17 @@ const NotebookName = ({ onClick, isActive, email, notebook, index }) => {
             setAllSections(sections)
             setSectionsLoading(false)
         } catch (error) {
+            // TODO - Show an error toast here
             console.log("Error ", error.message);
         }
     }
     useEffect(() => {
-        fetchSections()
-    },[])
-    useEffect(() => {
+        if(isActive) {
+            fetchSections()
+        }
         setShowContextMenu(false)
     },[isActive])
+  
     return (
         <li onClick={onClick} className="relative block min-h-[40px]   w-full text-left text-albaster  ">
             <div className="flex relative justify-between items-center px-2 py-1.5 pt-2">
@@ -127,7 +131,6 @@ const NotebookName = ({ onClick, isActive, email, notebook, index }) => {
             {/* The sections Names */}
             
             { isActive && <SectionsList
-                sectionsLoading={sectionsLoading}
                 notebookId={notebook.id}
                 allSections={allSections}
                 fetchSections={fetchSections}

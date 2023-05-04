@@ -29,7 +29,8 @@ const QuickNotes = ({ currentUser }) => {
 
     },[])
     return (
-        <div className="bg-titan-white-light p-4 rounded-sm container translate-y-7">
+        <div className="container">
+            <div className="bg-titan-white-light p-4 rounded-sm translate-y-7 max-w-[900px] mr-auto">
             <div className="flex gap-x-2 items-center">
                 <img 
                     src="/images/icons/notes-pin.svg"
@@ -40,8 +41,9 @@ const QuickNotes = ({ currentUser }) => {
             </div>
             
             <div className='text-kimberly mt-5 heading-five h-44'>
-                {notes?.blocks && <BasicEditor email={currentUser.email} notes={notes} />}
+                <BasicEditor email={currentUser.email} notes={notes} />
             </div>
+        </div>
         </div>
     )
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNotes } from "../../Context/NotesContext";
 import Loader from "../Loader";
 import NotesWrapper from "./NotesWrapper";
@@ -18,7 +18,7 @@ const AllNotes = () => {
     },[sectionId, notebookId])
 
     return (
-        <section className={`${allNotes.length > 0 && 'grid'} grid-cols-[250px_auto] relative h-full bg-victoria py-4 gap-x-2 pr-2`}>
+        <section className={`${allNotes.length > 0 && 'grid'} grid-cols-[300px_auto] relative h-full bg-victoria py-4 gap-x-2 pr-2`}>
             {
                 loadingNotes ?  <div className="h-full flex items-center justify-center ">
                     <Loader  height={35} width={35} />

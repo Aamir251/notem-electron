@@ -31,7 +31,7 @@ const Note = ({ onClick, isActive, note }) => {
             onMouseLeave={() => setIsHovered(false)}
 
             onClick={onClick}
-            className="cursor-pointer relative w-full bg-titan-white-light p-3 pl-4 relative h-20 flex flex-col justify-center">
+            className="cursor-pointer relative w-full bg-titan-white-light p-3 pl-4 relative h-28 flex flex-col justify-center">
         { 
             isActive && <motion.span
                 layoutId="active-note"
@@ -39,7 +39,7 @@ const Note = ({ onClick, isActive, note }) => {
             </motion.span> 
         }
         <h4 className="semibold text-victoria">{note.noteTitle}</h4>
-        <div className="text-waterloo heading-five" dangerouslySetInnerHTML={{ __html : note.blocks[0].data.text }} />
+        <div className="text-waterloo heading-five  h-full text-ellipsis text-clip overflow-hidden" dangerouslySetInnerHTML={{ __html : note.blocks[0].data.text }} />
         {
              isHovered && <motion.img
                 onClick={handleClick}

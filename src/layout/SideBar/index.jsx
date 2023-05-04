@@ -13,7 +13,7 @@ const SideBar = () => {
     const [ active, setActive ] = useState(0);
 
     const wrapperClass = " w-52 rounded-sm flex items-center pl-4 gap-x-4 py-3 pr-2 mx-auto cursor-pointer"
-    return <aside className="bg-victoria border border-bg-red-100 h-screen" >
+    return <aside className="bg-victoria h-screen" >
         <Logo />
         <div className="space-y-8">
             <div className="flex flex-col items-center">
